@@ -10,4 +10,5 @@ export default defineConfig({
       Store: path.resolve(__dirname, "./src/store"),
     },
   },
+  base: "/patient-admin-panel/",
 });
