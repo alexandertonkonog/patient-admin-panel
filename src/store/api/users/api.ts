@@ -6,8 +6,13 @@ import {
   UpdateUserRequest,
   User,
 } from "./models";
+import { UserRole } from "./enums";
 
-const roles = ["admin", "manager", "user"] as const;
+const roles = [
+  UserRole.ADMIN,
+  UserRole.ORTHOPEDIST,
+  UserRole.GNATHOLOGIST,
+] as const;
 
 // Моковые данные
 let mockUsers = Array.from({ length: 10 }, (_, index) => ({

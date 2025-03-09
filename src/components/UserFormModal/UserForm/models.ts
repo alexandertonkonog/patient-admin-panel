@@ -1,3 +1,5 @@
+import { UserRole } from "Store/api/users";
+
 export interface UserFormData {
   /** Имя пользователя */
   firstName: string;
@@ -6,7 +8,7 @@ export interface UserFormData {
   /** Email пользователя */
   email: string;
   /** Роль пользователя */
-  role: "admin" | "manager" | "user";
+  role: UserRole;
 }
 
 export interface IProps {

@@ -1,9 +1,11 @@
+import { UserRole } from "./enums";
+
 export interface User {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
-  role: "admin" | "manager" | "user";
+  role: UserRole;
   isActive: boolean;
 }
 
@@ -11,7 +13,7 @@ export interface CreateUserRequest {
   firstName: string;
   lastName: string;
   email: string;
-  role: "admin" | "manager" | "user";
+  role: UserRole;
 }
 
 export interface UpdateUserRequest extends CreateUserRequest {
