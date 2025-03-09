@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   AppBar,
   Toolbar,
-  Button,
   Stack,
   IconButton,
   Menu,
@@ -10,18 +9,18 @@ import {
   Avatar,
   Box,
   Tooltip,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { Link, useNavigate } from "react-router-dom";
-import { Logo } from "./Logo";
-import { useLogoutMutation } from "../store/api/auth";
-import { useTheme } from "../theme/ThemeContext";
-
-const MENU_ITEMS = [
-  { label: "Пациенты", path: "/" },
-  { label: "Пользователи", path: "/users" },
-];
+import { Logo } from "../Logo";
+import { useLogoutMutation } from "../../store/api/auth";
+import { useTheme } from "../../theme/ThemeContext";
+import PersonIcon from "@mui/icons-material/Person";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { RoleSwitcher } from "./RoleSwitcher";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -37,8 +36,14 @@ export const Header = () => {
     setAnchorEl(null);
   };
 
+  const handleUsersMenuItems = () => {
+    navigate("/users");
+    handleClose();
+  };
+
   const handleLogout = async () => {
     try {
+      handleClose();
       await logout().unwrap();
       navigate("/login");
     } catch (error) {
@@ -50,21 +55,11 @@ export const Header = () => {
     <AppBar position="static" color="default" elevation={2}>
       <Toolbar variant="dense" sx={{ minHeight: 48 }}>
         <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-          <Logo size="small" />
-          <Stack direction="row" spacing={1} sx={{ ml: 3 }}>
-            {MENU_ITEMS.map((item) => (
-              <Button
-                key={item.path}
-                component={Link}
-                to={item.path}
-                color="inherit"
-                size="small"
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Stack>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Logo size="small" />
+          </Link>
           <Stack direction="row" spacing={1} sx={{ ml: "auto" }}>
+            <RoleSwitcher />
             <Tooltip
               title={
                 mode === "dark"
@@ -113,7 +108,18 @@ export const Header = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleLogout}>Выход</MenuItem>
+              <MenuItem onClick={handleUsersMenuItems}>
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText>Пользователи</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText>Выход</ListItemText>
+              </MenuItem>
             </Menu>
           </Stack>
         </Box>

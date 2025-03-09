@@ -16,7 +16,7 @@ export const Modal: React.FC<IProps> = (props) => {
   const { open, onClose, title, children } = props;
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
     </Dialog>
