@@ -2,7 +2,7 @@ import { Stack, Typography, Button, Box } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { PatientsTable } from "../components/PatientsTable";
 import { useState } from "react";
-import { useRemovePatientsMutation } from "../store/api/patients";
+import { useRemovePatientsMutation, Patient } from "../store/api/patients";
 import { DeleteConfirmationModal } from "../components/DeleteConfirmationModal";
 
 export const HomePage = () => {
@@ -23,6 +23,11 @@ export const HomePage = () => {
       console.error("Ошибка при удалении пациентов:", error);
     }
     setDeleteModalOpen(false);
+  };
+
+  const handleEditPatient = (patient: Patient) => {
+    // Здесь будет логика редактирования пациента
+    console.log("Редактирование пациента:", patient);
   };
 
   return (
@@ -52,6 +57,7 @@ export const HomePage = () => {
       <PatientsTable
         onSelectedChange={setSelectedPatients}
         onDeletePatients={removePatients}
+        onEditPatient={handleEditPatient}
         isDeletingPatients={isDeleting}
       />
       <DeleteConfirmationModal

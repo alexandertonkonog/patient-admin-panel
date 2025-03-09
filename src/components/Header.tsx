@@ -21,7 +21,6 @@ import { useTheme } from "../theme/ThemeContext";
 const MENU_ITEMS = [
   { label: "Пациенты", path: "/" },
   { label: "Пользователи", path: "/users" },
-  { label: "Вход", path: "/login" },
 ];
 
 export const Header = () => {

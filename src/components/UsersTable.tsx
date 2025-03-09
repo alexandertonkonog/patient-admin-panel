@@ -20,32 +20,52 @@ import {
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { format, parseISO } from "date-fns";
-import { ru } from "date-fns/locale";
 import { useState, useEffect } from "react";
-import { useGetPatientsQuery, Patient } from "../store/api/patients";
+import { useGetUsersQuery, User } from "../store/api/users";
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 
-interface PatientsTableProps {
+interface UsersTableProps {
   onSelectedChange: (selected: number[]) => void;
-  onDeletePatients: (ids: number[]) => void;
-  onEditPatient: (patient: Patient) => void;
-  isDeletingPatients: boolean;
+  onDeleteUsers: (ids: number[]) => void;
+  onEditUser: (user: User) => void;
+  isDeletingUsers: boolean;
 }
 
-export const PatientsTable = ({
+const getRoleColor = (role: User["role"]) => {
+  switch (role) {
+    case "admin":
+      return "error";
+    case "manager":
+      return "warning";
+    case "user":
+      return "default";
+  }
+};
+
+const getRoleLabel = (role: User["role"]) => {
+  switch (role) {
+    case "admin":
+      return "Администратор";
+    case "manager":
+      return "Менеджер";
+    case "user":
+      return "Пользователь";
+  }
+};
+
+export const UsersTable = ({
   onSelectedChange,
-  onDeletePatients,
-  onEditPatient,
-  isDeletingPatients,
-}: PatientsTableProps) => {
+  onDeleteUsers,
+  onEditUser,
+  isDeletingUsers,
+}: UsersTableProps) => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selected, setSelected] = useState<number[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [patientToDelete, setPatientToDelete] = useState<number | null>(null);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
 
-  const { data, isLoading, isFetching } = useGetPatientsQuery({
+  const { data, isLoading, isFetching } = useGetUsersQuery({
     page,
     perPage: rowsPerPage,
   });
@@ -65,13 +85,9 @@ export const PatientsTable = ({
     setSelected([]); // Сбрасываем выбранные элементы при изменении количества строк
   };
 
-  const formatDate = (dateString: string) => {
-    return format(parseISO(dateString), "d MMMM yyyy, HH:mm", { locale: ru });
-  };
-
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked && data) {
-      const newSelected = data.items.map((patient) => patient.id);
+      const newSelected = data.items.map((user) => user.id);
       setSelected(newSelected);
       return;
     }
@@ -98,22 +114,22 @@ export const PatientsTable = ({
     setSelected(newSelected);
   };
 
-  const handleDeleteClick = (e: React.MouseEvent, patientId: number) => {
+  const handleDeleteClick = (e: React.MouseEvent, userId: number) => {
     e.stopPropagation();
-    setPatientToDelete(patientId);
+    setUserToDelete(userId);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = () => {
-    if (patientToDelete !== null) {
-      onDeletePatients([patientToDelete]);
+    if (userToDelete !== null) {
+      onDeleteUsers([userToDelete]);
     }
     handleDeleteModalClose();
   };
 
   const handleDeleteModalClose = () => {
     setDeleteModalOpen(false);
-    setPatientToDelete(null);
+    setUserToDelete(null);
   };
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -127,9 +143,9 @@ export const PatientsTable = ({
   }
 
   const pageCount = Math.ceil(data.total / rowsPerPage);
-  const patientToDeleteName = data.items.find(
-    (p) => p.id === patientToDelete
-  )?.name;
+  const userToDeleteName = data.items.find(
+    (u) => u.id === userToDelete
+  )?.firstName;
 
   return (
     <>
@@ -172,21 +188,21 @@ export const PatientsTable = ({
                     onChange={handleSelectAllClick}
                   />
                 </TableCell>
-                <TableCell>Имя пациента</TableCell>
-                <TableCell>Последнее обновление</TableCell>
+                <TableCell>Имя пользователя</TableCell>
+                <TableCell>Роль</TableCell>
                 <TableCell align="center">Статус</TableCell>
                 <TableCell align="right" />
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.items.map((patient: Patient) => {
-                const isItemSelected = isSelected(patient.id);
+              {data.items.map((user: User) => {
+                const isItemSelected = isSelected(user.id);
 
                 return (
                   <TableRow
-                    key={patient.id}
+                    key={user.id}
                     hover
-                    onClick={() => handleClick(patient.id)}
+                    onClick={() => handleClick(user.id)}
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
@@ -194,26 +210,23 @@ export const PatientsTable = ({
                       <Checkbox size="small" checked={isItemSelected} />
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">{patient.name}</Typography>
+                      <Typography variant="body2">
+                        {user.firstName} {user.lastName}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "text.secondary" }}
-                      >
-                        {formatDate(patient.lastUpdate)}
-                      </Typography>
+                      <Chip
+                        size="small"
+                        label={getRoleLabel(user.role)}
+                        color={getRoleColor(user.role)}
+                      />
                     </TableCell>
                     <TableCell align="center">
                       <Chip
                         size="small"
-                        label={
-                          patient.isUpdating
-                            ? "Редактируется"
-                            : "Не редактируется"
-                        }
-                        color={patient.isUpdating ? "info" : undefined}
-                        variant={patient.isUpdating ? "filled" : "outlined"}
+                        label={user.isActive ? "Активирован" : "Не активирован"}
+                        color={user.isActive ? "success" : undefined}
+                        variant={user.isActive ? "filled" : "outlined"}
                       />
                     </TableCell>
                     <TableCell align="right">
@@ -223,7 +236,7 @@ export const PatientsTable = ({
                             size="small"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onEditPatient(patient);
+                              onEditUser(user);
                             }}
                           >
                             <EditOutlinedIcon fontSize="small" />
@@ -233,7 +246,7 @@ export const PatientsTable = ({
                           <IconButton
                             size="small"
                             color="error"
-                            onClick={(e) => handleDeleteClick(e, patient.id)}
+                            onClick={(e) => handleDeleteClick(e, user.id)}
                           >
                             <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
@@ -285,8 +298,8 @@ export const PatientsTable = ({
         open={deleteModalOpen}
         onClose={handleDeleteModalClose}
         onConfirm={handleDeleteConfirm}
-        title={`Удалить ${patientToDeleteName || "пациента"}?`}
-        isLoading={isDeletingPatients}
+        title={`Удалить ${userToDeleteName || "пользователя"}?`}
+        isLoading={isDeletingUsers}
       />
     </>
   );
