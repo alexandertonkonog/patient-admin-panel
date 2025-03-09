@@ -16,7 +16,6 @@ export interface CreateUserRequest {
 
 export interface UpdateUserRequest extends CreateUserRequest {
   id: number;
-  isActive: boolean;
 }
 
 export interface PaginatedResponse<T> {

@@ -5,7 +5,12 @@ import { IProps } from "./models";
 import { useGetUserByIdQuery, useUpdateUserMutation } from "Store/api/users";
 
 export const UserEditContent: React.FC<IProps> = ({ userId, onClose }) => {
-  const { data: user, isLoading: isLoadingUser } = useGetUserByIdQuery(userId);
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+    isSuccess: isSuccessUser,
+  } = useGetUserByIdQuery(userId);
   const [updateUser, { isLoading: isUpdating, isError }] =
     useUpdateUserMutation();
 
@@ -15,6 +20,10 @@ export const UserEditContent: React.FC<IProps> = ({ userId, onClose }) => {
 
   if (isLoadingUser) {
     return <CircularProgress />;
+  }
+
+  if (isErrorUser || !isSuccessUser) {
+    return null;
   }
 
   return (
