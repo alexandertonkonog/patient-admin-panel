@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LoginRequest, LoginResponse } from "./models";
+import { UserRole } from "../users";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -22,7 +23,7 @@ export const authApi = createApi({
             user: {
               id: 1,
               login: credentials.login,
-              role: credentials.role || "user",
+              role: credentials.role || UserRole.GNATHOLOGIST,
             },
           },
         };
