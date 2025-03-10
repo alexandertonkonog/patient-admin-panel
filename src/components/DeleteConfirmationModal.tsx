@@ -1,11 +1,5 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Button, DialogActions, Typography } from "@mui/material";
+import { Modal } from "./Modal";
 
 interface DeleteConfirmationModalProps {
   open: boolean;
@@ -23,21 +17,9 @@ export const DeleteConfirmationModal = ({
   isLoading = false,
 }: DeleteConfirmationModalProps) => {
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="xs"
-      fullWidth
-      PaperProps={{
-        elevation: 0,
-        sx: { border: 1, borderColor: "grey.700" },
-      }}
-    >
-      <DialogTitle sx={{ pb: 1 }}>Подтверждение удаления</DialogTitle>
-      <DialogContent>
-        <Typography>{title}</Typography>
-      </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
+    <Modal open={open} onClose={onClose} title="Подтверждение удаления">
+      <Typography>{title}</Typography>
+      <DialogActions>
         <Button onClick={onClose} size="small" disabled={isLoading}>
           Отмена
         </Button>
@@ -51,6 +33,6 @@ export const DeleteConfirmationModal = ({
           Удалить
         </Button>
       </DialogActions>
-    </Dialog>
+    </Modal>
   );
 };

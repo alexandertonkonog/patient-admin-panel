@@ -135,7 +135,13 @@ export const PatientsTable = ({
     <>
       <Paper
         elevation={0}
-        sx={{ border: 1, borderColor: "grey.700", position: "relative" }}
+        sx={{
+          border: 1,
+          borderColor: "grey.700",
+          position: "relative",
+          bgcolor: (theme) =>
+            theme.palette.mode === "dark" ? "#0C1017" : "#fff",
+        }}
       >
         {isFetching && (
           <Box

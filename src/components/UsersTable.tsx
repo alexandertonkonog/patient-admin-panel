@@ -157,6 +157,8 @@ export const UsersTable = ({
           display: "flex",
           flexDirection: "column",
           flex: 1,
+          bgcolor: (theme) =>
+            theme.palette.mode === "dark" ? "#0C1017" : "#fff",
         }}
       >
         {isFetching && (
@@ -274,7 +276,8 @@ export const UsersTable = ({
             justifyContent: "space-between",
             borderTop: 1,
             borderColor: "grey.700",
-            bgcolor: "background.paper",
+            bgcolor: (theme) =>
+              theme.palette.mode === "dark" ? "#0C1017" : "#fff",
           }}
         >
           <Tooltip title="Строк на странице" placement="top">

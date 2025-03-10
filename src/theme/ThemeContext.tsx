@@ -41,6 +41,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const theme = createTheme({
     palette: {
       mode,
+      background: {
+        default: mode === "dark" ? "#0C1017" : "#fff",
+      },
     },
   });
 

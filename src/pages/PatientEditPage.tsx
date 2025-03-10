@@ -27,7 +27,7 @@ export const PatientEditPage = () => {
   }
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={1}>
       <Box>
         <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mb: 2 }}>
           <Link
@@ -52,10 +52,7 @@ export const PatientEditPage = () => {
 
       <Box>
         <PatientForm
-          defaultValues={{
-            firstName: patient.firstName,
-            lastName: patient.lastName,
-          }}
+          defaultValues={patient}
           onSubmit={handleSubmit}
           mode="edit"
         />

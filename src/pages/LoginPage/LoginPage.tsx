@@ -15,8 +15,8 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
-import { useLoginMutation } from "../store/api/auth";
-import { Logo } from "../components/Logo";
+import { useLoginMutation } from "../../store/api/auth";
+import { Logo } from "./Logo";
 import { UserRole, USER_ROLE_LABELS } from "Store/api/users";
 
 interface LoginFormInputs {

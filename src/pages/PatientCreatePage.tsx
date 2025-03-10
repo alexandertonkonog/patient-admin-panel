@@ -32,12 +32,12 @@ export const PatientCreatePage = () => {
             Новый пациент
           </Typography>
         </Breadcrumbs>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h5" component="h1">
           Новый пациент
         </Typography>
       </Box>
 
-      <Box sx={{ maxWidth: 600 }}>
+      <Box>
         <PatientForm
           onSubmit={handleSubmit}
           mode="create"

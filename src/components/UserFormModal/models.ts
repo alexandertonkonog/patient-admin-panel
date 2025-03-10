@@ -6,5 +6,5 @@ export interface IProps {
   /** Режим работы модального окна */
   mode?: "create" | "edit";
   /** ID пользователя для редактирования */
-  userId?: number;
+  userId: number | null;
 }

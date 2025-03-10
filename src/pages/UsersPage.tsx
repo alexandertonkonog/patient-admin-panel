@@ -96,6 +96,7 @@ export const UsersPage = () => {
         open={formModalOpen}
         onClose={handleCloseFormModal}
         mode={hasEditingUser ? "edit" : "create"}
+        userId={editingUserId}
       />
     </Stack>
   );
