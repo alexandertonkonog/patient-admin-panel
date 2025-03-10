@@ -1,13 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetPatientsParams, PaginatedPatients } from "./models";
-
-// Моковые данные
-const mockPatients = Array.from({ length: 10 }, (_, index) => ({
-  id: index + 1,
-  name: `Пациент ${index + 1}`,
-  lastUpdate: new Date(2024, 2, Math.floor(Math.random() * 30)).toISOString(),
-  isUpdating: Math.random() > 0.7,
-}));
+import { GetPatientsParams, PaginatedPatients, Patient } from "./models";
+import { patients } from "./mocks";
 
 export const patientsApi = createApi({
   reducerPath: "patientsApi",
@@ -23,18 +16,28 @@ export const patientsApi = createApi({
         const perPage = params?.perPage ?? 10;
         const start = (page - 1) * perPage;
         const end = start + perPage;
-        const items = mockPatients.slice(start, end);
+        const items = patients.slice(start, end);
 
         return {
           data: {
             items,
-            total: mockPatients.length,
+            total: patients.length,
             page,
             perPage,
           },
         };
       },
       providesTags: ["Patients"],
+    }),
+    getPatientById: builder.query<Patient, number>({
+      queryFn: (id) => {
+        const patient = patients.find((p) => p.id === id);
+        if (!patient) {
+          return { error: { status: 404, data: "Patient not found" } };
+        }
+        return { data: patient };
+      },
+      providesTags: (_, __, id) => [{ type: "Patients", id }],
     }),
     removePatients: builder.mutation<void, number[]>({
       query: (ids) => ({
@@ -46,3 +49,9 @@ export const patientsApi = createApi({
     }),
   }),
 });
+
+export const {
+  useGetPatientsQuery,
+  useGetPatientByIdQuery,
+  useRemovePatientsMutation,
+} = patientsApi;

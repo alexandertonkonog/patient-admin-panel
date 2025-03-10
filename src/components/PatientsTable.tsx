@@ -129,7 +129,7 @@ export const PatientsTable = ({
   const pageCount = Math.ceil(data.total / rowsPerPage);
   const patientToDeleteName = data.items.find(
     (p) => p.id === patientToDelete
-  )?.name;
+  )?.firstName;
 
   return (
     <>
@@ -194,7 +194,9 @@ export const PatientsTable = ({
                       <Checkbox size="small" checked={isItemSelected} />
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">{patient.name}</Typography>
+                      <Typography variant="body2">
+                        {patient.firstName} {patient.lastName}
+                      </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography
@@ -208,9 +210,7 @@ export const PatientsTable = ({
                       <Chip
                         size="small"
                         label={
-                          patient.isUpdating
-                            ? "Редактируется"
-                            : "Не редактируется"
+                          patient.isUpdating ? "Редактируется" : "Доступен"
                         }
                         color={patient.isUpdating ? "info" : undefined}
                         variant={patient.isUpdating ? "filled" : "outlined"}

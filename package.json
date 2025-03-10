@@ -15,9 +15,11 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@faker-js/faker": "^9.6.0",
     "@fontsource/roboto": "^5.2.5",
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
+    "@mui/x-charts": "^7.27.1",
     "@reduxjs/toolkit": "^2.6.1",
     "date-fns": "^4.1.0",
     "react": "^19.0.0",

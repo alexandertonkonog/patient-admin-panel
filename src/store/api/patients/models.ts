@@ -1,6 +1,7 @@
 export interface Patient {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   lastUpdate: string;
   isUpdating: boolean;
 }

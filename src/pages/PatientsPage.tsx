@@ -1,13 +1,17 @@
 import { Stack, Typography, Button, Box } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import AddIcon from "@mui/icons-material/Add";
 import { PatientsTable } from "../components/PatientsTable";
 import { useState } from "react";
 import { useRemovePatientsMutation, Patient } from "../store/api/patients";
 import { DeleteConfirmationModal } from "../components/DeleteConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
-export const HomePage = () => {
+export const PatientsPage = () => {
+  const navigate = useNavigate();
   const [selectedPatients, setSelectedPatients] = useState<number[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const [removePatients, { isLoading: isDeleting }] =
     useRemovePatientsMutation();
 
@@ -26,12 +30,12 @@ export const HomePage = () => {
   };
 
   const handleEditPatient = (patient: Patient) => {
-    // Здесь будет логика редактирования пациента
-    console.log("Редактирование пациента:", patient);
+    console.log(patient);
+    navigate(`/patients/${patient.id}/edit`);
   };
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} sx={{ height: "100%", flex: 1 }}>
       <Box
         sx={{
           display: "flex",
@@ -42,24 +46,38 @@ export const HomePage = () => {
         <Typography variant="h6" sx={{ fontWeight: 500 }}>
           Пациенты
         </Typography>
-        {selectedPatients.length > 0 && (
+        <Box sx={{ display: "flex", gap: 2 }}>
+          {selectedPatients.length > 0 && (
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              startIcon={<DeleteOutlineIcon />}
+              onClick={handleDeleteSelected}
+            >
+              Удалить выбранных пациентов
+            </Button>
+          )}
           <Button
-            variant="outlined"
-            color="error"
+            variant="contained"
             size="small"
-            startIcon={<DeleteOutlineIcon />}
-            onClick={handleDeleteSelected}
+            startIcon={<AddIcon />}
+            onClick={() => navigate("/patients/create")}
           >
-            Удалить выбранных пациентов
+            Создать пациента
           </Button>
-        )}
+        </Box>
       </Box>
-      <PatientsTable
-        onSelectedChange={setSelectedPatients}
-        onDeletePatients={removePatients}
-        onEditPatient={handleEditPatient}
-        isDeletingPatients={isDeleting}
-      />
+      <Box
+        sx={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}
+      >
+        <PatientsTable
+          onSelectedChange={setSelectedPatients}
+          onDeletePatients={removePatients}
+          onEditPatient={handleEditPatient}
+          isDeletingPatients={isDeleting}
+        />
+      </Box>
       <DeleteConfirmationModal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
