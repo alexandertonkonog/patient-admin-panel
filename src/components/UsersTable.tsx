@@ -21,7 +21,12 @@ import {
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState, useEffect } from "react";
-import { useGetUsersQuery, User } from "../store/api/users";
+import {
+  useGetUsersQuery,
+  User,
+  UserRole,
+  USER_ROLE_LABELS,
+} from "../store/api/users";
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 
 interface UsersTableProps {
@@ -31,26 +36,19 @@ interface UsersTableProps {
   isDeletingUsers: boolean;
 }
 
-const getRoleColor = (role: User["role"]) => {
+const getRoleColor = (role: UserRole) => {
   switch (role) {
-    case "admin":
+    case UserRole.ADMIN:
       return "error";
-    case "manager":
+    case UserRole.ORTHOPEDIST:
       return "warning";
-    case "user":
+    case UserRole.GNATHOLOGIST:
       return "default";
   }
 };
 
-const getRoleLabel = (role: User["role"]) => {
-  switch (role) {
-    case "admin":
-      return "Администратор";
-    case "manager":
-      return "Менеджер";
-    case "user":
-      return "Пользователь";
-  }
+const getRoleLabel = (role: UserRole) => {
+  return USER_ROLE_LABELS[role];
 };
 
 export const UsersTable = ({
@@ -151,7 +149,15 @@ export const UsersTable = ({
     <>
       <Paper
         elevation={0}
-        sx={{ border: 1, borderColor: "grey.700", position: "relative" }}
+        sx={{
+          border: 1,
+          borderColor: "grey.700",
+          position: "relative",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+        }}
       >
         {isFetching && (
           <Box
@@ -171,8 +177,8 @@ export const UsersTable = ({
             <CircularProgress size={40} />
           </Box>
         )}
-        <TableContainer>
-          <Table size="small">
+        <TableContainer sx={{ flex: 1, overflow: "auto" }}>
+          <Table size="small" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox">
@@ -268,6 +274,7 @@ export const UsersTable = ({
             justifyContent: "space-between",
             borderTop: 1,
             borderColor: "grey.700",
+            bgcolor: "background.paper",
           }}
         >
           <Tooltip title="Строк на странице" placement="top">

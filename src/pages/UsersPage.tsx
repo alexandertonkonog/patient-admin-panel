@@ -42,7 +42,7 @@ export const UsersPage = () => {
   const hasEditingUser = editingUserId !== null;
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} sx={{ height: "100%", flex: 1 }}>
       <Box
         sx={{
           display: "flex",
@@ -75,12 +75,16 @@ export const UsersPage = () => {
           </Button>
         </Box>
       </Box>
-      <UsersTable
-        onSelectedChange={setSelectedUsers}
-        onDeleteUsers={removeUsers}
-        onEditUser={handleEditUser}
-        isDeletingUsers={isDeleting}
-      />
+      <Box
+        sx={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}
+      >
+        <UsersTable
+          onSelectedChange={setSelectedUsers}
+          onDeleteUsers={removeUsers}
+          onEditUser={handleEditUser}
+          isDeletingUsers={isDeleting}
+        />
+      </Box>
       <DeleteConfirmationModal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}

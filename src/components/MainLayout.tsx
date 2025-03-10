@@ -8,7 +8,13 @@ export const MainLayout = () => {
       <Header />
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+        sx={{
+          flexGrow: 1,
+          bgcolor: "background.default",
+          p: 3,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <Outlet />
       </Box>
