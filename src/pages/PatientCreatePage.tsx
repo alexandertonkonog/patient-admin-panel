@@ -41,10 +41,7 @@ export const PatientCreatePage = () => {
         <PatientForm
           onSubmit={handleSubmit}
           mode="create"
-          defaultValues={{
-            firstName: "",
-            lastName: "",
-          }}
+          defaultValues={{} as PatientFormData}
         />
       </Box>
     </Stack>

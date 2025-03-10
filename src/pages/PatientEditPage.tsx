@@ -52,7 +52,7 @@ export const PatientEditPage = () => {
 
       <Box>
         <PatientForm
-          defaultValues={patient}
+          defaultValues={patient as PatientFormData}
           onSubmit={handleSubmit}
           mode="edit"
         />
