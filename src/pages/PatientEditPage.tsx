@@ -50,7 +50,7 @@ export const PatientEditPage = () => {
         </Breadcrumbs>
       </Box>
 
-      <Box sx={{ maxWidth: 600 }}>
+      <Box>
         <PatientForm
           defaultValues={{
             firstName: patient.firstName,
