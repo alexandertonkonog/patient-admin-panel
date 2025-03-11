@@ -10,9 +10,9 @@ export const ProtectedRoute: React.FC<IProps> = ({ children }) => {
   const location = useLocation();
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/login" state={{ from: location }} replace />;
+  // }
 
   return <>{children}</>;
 };

@@ -17,7 +17,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
-import { LineChart } from "@mui/x-charts/LineChart";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import { PatientFormData, PatientFormProps } from "./models";
 import {
   TEETH_OPTIONS,
@@ -29,6 +30,7 @@ import {
 import { UserRole } from "../../../store/api/users";
 import { useSelector } from "react-redux";
 import { RootState } from "Store/store";
+import { TreatmentPlan } from "./TreatmentPlan";
 
 const ROLE_ACCESS = {
   [UserRole.ADMIN]: ["chart"],
@@ -45,6 +47,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({
   isError,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isChartExpanded, setIsChartExpanded] = useState(false);
   const userRole =
     useSelector((state: RootState) => state.auth.user?.role) || UserRole.ADMIN;
 
@@ -75,7 +78,8 @@ export const PatientForm: React.FC<PatientFormProps> = ({
   const renderCard = (
     title: string,
     section: string,
-    content: React.ReactNode
+    content: React.ReactNode,
+    isExpandable?: boolean
   ) => {
     const canAccess = hasAccess(section);
     return (
@@ -96,7 +100,31 @@ export const PatientForm: React.FC<PatientFormProps> = ({
               mb: 2,
             }}
           >
-            <Typography variant="h6">{title}</Typography>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h6">{title}</Typography>
+              {isExpandable && (
+                <Tooltip title={isChartExpanded ? "Свернуть" : "Развернуть"}>
+                  <IconButton
+                    size="small"
+                    onClick={() => setIsChartExpanded(!isChartExpanded)}
+                    sx={{ ml: 1 }}
+                  >
+                    {isChartExpanded ? (
+                      <CloseFullscreenIcon fontSize="small" />
+                    ) : (
+                      <OpenInFullIcon fontSize="small" />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
             {!canAccess && (
               <Tooltip title="У вас нет доступа к этому разделу">
                 <LockIcon color="disabled" fontSize="small" />
@@ -210,33 +238,26 @@ export const PatientForm: React.FC<PatientFormProps> = ({
         </Card>
 
         <Grid container spacing={1} sx={{ p: 0 }}>
-          <Grid item xs={12} md={6} lg={4} sx={{ display: "flex" }}>
+          <Grid
+            item
+            xs={12}
+            md={isChartExpanded ? 12 : 6}
+            lg={isChartExpanded ? 12 : 4}
+            sx={{ display: "flex" }}
+          >
             {renderCard(
-              "График лечения",
+              "План лечения",
               "chart",
-              <Box sx={{ flex: 1, height: 200 }}>
-                <LineChart
-                  series={[
-                    {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5],
-                      label: "Болевые ощущения",
-                      color: "#1976d2",
-                    },
-                  ]}
-                  height={400}
-                  xAxis={[
-                    {
-                      data: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн"],
-                      scaleType: "band",
-                    },
-                  ]}
-                  sx={{
-                    ".MuiLineElement-root": {
-                      strokeWidth: 2,
-                    },
-                  }}
+              <Box sx={{ flex: 1, minHeight: 400 }}>
+                <TreatmentPlan
+                  teeth={watch("teeth")}
+                  gums={watch("gums")}
+                  bite={watch("bite")}
+                  tmj={watch("tmj")}
+                  muscles={watch("muscles")}
                 />
-              </Box>
+              </Box>,
+              true
             )}
           </Grid>
 

@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LoginRequest, LoginResponse } from "./models";
+import {
+  LoginRequest,
+  LoginResponse,
+  RequestPasswordResetDto,
+  ResetPasswordDto,
+} from "./models";
 import { UserRole } from "../users";
 
 export const authApi = createApi({
@@ -8,6 +13,7 @@ export const authApi = createApi({
     baseUrl: "/api",
     credentials: "include",
   }),
+
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       // query: (credentials) => ({
@@ -33,6 +39,20 @@ export const authApi = createApi({
       query: () => ({
         url: "/auth/logout",
         method: "POST",
+      }),
+    }),
+    requestPasswordReset: builder.mutation<void, RequestPasswordResetDto>({
+      query: (data) => ({
+        url: "/auth/password/reset-request",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation<void, ResetPasswordDto>({
+      query: (data) => ({
+        url: "/auth/password/reset",
+        method: "POST",
+        body: data,
       }),
     }),
   }),

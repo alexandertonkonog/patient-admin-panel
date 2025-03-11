@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetPatientsParams, PaginatedPatients, Patient } from "./models";
+import {
+  GetPatientsParams,
+  PaginatedPatients,
+  Patient,
+  ExtendedPatient,
+} from "./models";
 import { patients } from "./mocks";
 
 export const patientsApi = createApi({
@@ -29,13 +34,44 @@ export const patientsApi = createApi({
       },
       providesTags: ["Patients"],
     }),
-    getPatientById: builder.query<Patient, number>({
+    getPatientById: builder.query<ExtendedPatient, number>({
       queryFn: (id) => {
         const patient = patients.find((p) => p.id === id);
         if (!patient) {
           return { error: { status: 404, data: "Patient not found" } };
         }
-        return { data: patient };
+        const extendedPatient: ExtendedPatient = {
+          ...patient,
+          teeth: {
+            caries: false,
+            pulpitis: false,
+            periodontitis: false,
+            missing: false,
+            crown: false,
+            implant: false,
+          },
+          gums: {
+            gingivitis: false,
+            recession: false,
+            bleeding: false,
+            swelling: false,
+          },
+          tmj: {
+            clicks: false,
+            pain: false,
+            limitedOpening: false,
+            locking: false,
+            hypermobility: false,
+          },
+          muscles: {
+            palpationPain: false,
+            spasm: false,
+            hypertonus: false,
+            asymmetry: false,
+            fatigue: false,
+          },
+        };
+        return { data: extendedPatient };
       },
       providesTags: (_, __, id) => [{ type: "Patients", id }],
     }),
